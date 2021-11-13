@@ -54,31 +54,31 @@ if exists fzf; then
   export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 fi
 
-if [ -f "$HOME/.zinit/zinit.zsh" ]; then
-  source ~/.zinit/zinit.zsh
-  # install zsh plugins with zinit turbo mode
-  zinit wait lucid depth=1 for \
-    https://raw.githubusercontent.com/junegunn/fzf/master/shell/key-bindings.zsh \
-    atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" \
-      zdharma-continuum/fast-syntax-highlighting \
-    blockf \
-      zsh-users/zsh-completions \
-    svn \
-      OMZ::plugins/history-substring-search \
-    atload"!_zsh_autosuggest_start" \
-      zsh-users/zsh-autosuggestions
-  # restore previous OLDPWD value; this must be executed last
-  touch "$PERSISTENT/.oldpwd"
-  zinit wait lucid for \
-    src".oldpwd" \
-      "$PERSISTENT"
-  # powerlevel10k theme
-  # zinit light-mode depth=1 for \
-  #   romkatv/powerlevel10k
+# if [ -f "$HOME/.zinit/zinit.zsh" ]; then
+#   source ~/.zinit/zinit.zsh
+#   # install zsh plugins with zinit turbo mode
+#   zinit wait lucid depth=1 for \
+#     https://raw.githubusercontent.com/junegunn/fzf/master/shell/key-bindings.zsh \
+#     atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" \
+#       zdharma-continuum/fast-syntax-highlighting \
+#     blockf \
+#       zsh-users/zsh-completions \
+#     svn \
+#       OMZ::plugins/history-substring-search \
+#     atload"!_zsh_autosuggest_start" \
+#       zsh-users/zsh-autosuggestions
+#   # restore previous OLDPWD value; this must be executed last
+#   touch "$PERSISTENT/.oldpwd"
+#   zinit wait lucid for \
+#     src".oldpwd" \
+#       "$PERSISTENT"
+#   # powerlevel10k theme
+#   # zinit light-mode depth=1 for \
+#   #   romkatv/powerlevel10k
 
-  export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=8,underline"
-  export ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd history)
-fi
+#   export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=8,underline"
+#   export ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd history)
+# fi
 
 if exists bro-pdns; then
   alias pdns=bro-pdns
@@ -222,8 +222,9 @@ bindkey  "^[[F"    end-of-line
 random-tip
 
 ## ZSH Setup; must be last ##
-autoload -Uz compinit
-compinit
+eval "$(sheldon source)"
+# autoload -Uz compinit
+# compinit
 # autocompletion with an arrow-key driven interface
 zstyle ':completion:*' menu select
 

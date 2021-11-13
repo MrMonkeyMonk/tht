@@ -257,7 +257,7 @@ ENV ZSH_COMPLETIONS=/usr/share/zsh/vendor-completions
     COPY --from=c-builder /tmp/zeek-cut $BIN/zeek-cut
 
     # zq - zeek file processor
-    ARG ZQ_VERSION=0.31.0
+    ARG ZQ_VERSION=0.32.0
     RUN wget -nv -O /tmp/zq.zip https://github.com/brimdata/zed/releases/download/v${ZQ_VERSION}/zed-v${ZQ_VERSION}.linux-amd64.zip \
      && unzip -j -d /tmp/ /tmp/zq.zip \
      && mv /tmp/zq $BIN
@@ -339,13 +339,27 @@ ENV ZSH_COMPLETIONS=/usr/share/zsh/vendor-completions
     COPY zsh/.zlogout /root/
     # COPY zsh/.p10k.zsh /root/
     COPY zsh/.config/fd/ignore /root/.config/fd/ignore
-    
+
+    # sheldon - plugin manager for zsh (and others)
+    ARG SHELDON_VERSION=0.6.5
+    RUN wget -nv -O /tmp/sheldon.tar.gz https://github.com/rossmacarthur/sheldon/releases/download/${SHELDON_VERSION}/sheldon-${SHELDON_VERSION}-x86_64-unknown-linux-musl.tar.gz \
+     && tar -C /tmp -xzf /tmp/sheldon.tar.gz \
+     && mv /tmp/sheldon $BIN
+    # ENV SHELDON_CONFIG_DIR
+    # ENV SHELDON_DATA_DIR
+    # ENV SHELDON_CONFIG_FILE
+    # ENV SHELDON_LOCK_FILE
+    # ENV SHELDON_CLONE_DIR
+    # ENV SHELDON_DOWNLOAD_DIR
+    COPY zsh/.sheldon /root/.sheldon
+    RUN sheldon lock
+
     # zinit - plugin manager for zsh
     # svn required for some zinit functions
-    RUN apt-get -y install subversion
-    RUN git clone https://github.com/zdharma-continuum/zinit.git /root/.zinit
+    # RUN apt-get -y install subversion
+    # RUN git clone https://github.com/zdharma-continuum/zinit.git /root/.zinit
     # https://github.com/zdharma/zinit/issues/484#issuecomment-785665617
-    RUN TERM=${TERM:-screen-256color} zsh -isc "@zinit-scheduler burst"
+    # RUN TERM=${TERM:-screen-256color} zsh -isc "@zinit-scheduler burst"
 
 ## Cleanup ##
     RUN rm -rf /tmp/*
